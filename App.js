@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, FlatList} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, Keyboard} from 'react-native';
 
 import firebase from './src/services/firebaseConnection';
 import Login from './src/pages/Login';
@@ -17,6 +17,7 @@ export default function App() {
         return;
       }
      firebase.database().ref('tarefas').child(user).once('value', (snapShot) => {
+      setTasks([]);
        snapShot?.forEach(childItem => {
          let data = {
            key: childItem.key,
@@ -30,6 +31,10 @@ export default function App() {
  }, [user])
 
   function handleAdd(){
+
+    if(newTask === ''){
+      return;
+    }
     const tarefa =  firebase.database().ref('tarefas').child(user);
     const chave = tarefa.push().key;
 
@@ -40,11 +45,16 @@ export default function App() {
         chave: chave,
         tarefa: tasks
       }
-      setTasks(oldData =>[ ...oldData, data])
-      alert('tarefa cadastrada' + newTask)
+      setTasks(oldTasks => [...oldTasks, data])
+      Keyboard.dismiss
+      setNewTask('')
     }).catch((error) => {
       alert('Ops, algo deu errado!')
     })
+  }
+
+  function handleDelete(key){
+    alert('Excluindo tarefa!')
   }
 
   if(!user){
@@ -52,14 +62,13 @@ export default function App() {
   }
   
 
-
   return (
     <SafeAreaView>
         <View style={styles.container}>
             <TextInput
               style={styles.input}
               placeholder='Nova tarefa'
-              value={tasks}
+              value={newTask}
               onChangeText={text => setNewTask(text)}
             />
             <TouchableOpacity style={styles.btnArea} onPress={handleAdd}>
@@ -82,21 +91,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     flexDirection: 'row',
-    margin: 10
+    margin: 10,
+    marginBottom: 50,
   },
   input: {
-    width: '90%',
+    width: '88%',
     height: 40,
     padding: 5,
     borderWidth: 1,
     borderRadius: 2,
     borderColor: '#121212',
-    marginBottom: 10,
     fontSize: 16,
-    marginRight: 5,
+    marginRight: 10,
   },
   btnArea: {
-    width: 25,
+    width: 26,
     height: 40,
     backgroundColor: '#000',
     alignItems: 'center',

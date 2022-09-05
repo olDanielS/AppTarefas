@@ -2,13 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 
-export default function RenderItems({data}) {
+export default function RenderItems({data, deleteTarefa}) {
  return (
    <View style={styles.container}> 
-        <TouchableOpacity style={{alignItems: 'center'}}>
+        <TouchableOpacity style={{alignItems: 'center'}} onPress={() => deleteTarefa(data.key)}>
             <Feather name='trash-2' size={20} color='#FFF'/>
         </TouchableOpacity>
-        <Text style={styles.nome}> {data.nome}</Text>
+        <TouchableWithoutFeedback>
+          <Text style={styles.nome}> {data.nome}</Text>
+        </TouchableWithoutFeedback>
    </View>
   );
 }

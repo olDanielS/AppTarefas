@@ -54,7 +54,10 @@ export default function App() {
   }
 
   function handleDelete(key){
-    alert('Excluindo tarefa!')
+    firebase.database().ref('tarefas').child(user).child(key).remove().then(() => {
+      const locateTask = tasks.filter(item => item.key !== key)
+      setTasks(locateTask)
+    })
   }
 
   if(!user){
@@ -79,7 +82,7 @@ export default function App() {
         <FlatList
           data={tasks}
           keyExtractor={item => item.key}
-          renderItem={({item}) => <RenderItems data={item} />}
+          renderItem={({item}) => <RenderItems data={item} deleteTarefa={handleDelete} />}
         />
       
     </SafeAreaView>

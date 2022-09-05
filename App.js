@@ -18,7 +18,7 @@ export default function App() {
       }
      firebase.database().ref('tarefas').child(user).once('value', (snapShot) => {
       setTasks([]);
-       snapShot?.forEach(childItem => {
+       snapShot?.forEach((childItem) => {
          let data = {
            key: childItem.key,
            nome: childItem.val().nome
@@ -35,22 +35,22 @@ export default function App() {
     if(newTask === ''){
       return;
     }
-    const tarefa =  firebase.database().ref('tarefas').child(user);
-    const chave = tarefa.push().key;
+    let tarefa =  firebase.database().ref('tarefas').child(user);
+    let chave = tarefa.push().key;
 
     tarefa.child(chave).set({
       nome: newTask
     }).then((value) => {
-      let data = {
-        chave: chave,
-        tarefa: tasks
+      const data = {
+        key: chave,
+        nome: newTask
       }
       setTasks(oldTasks => [...oldTasks, data])
       Keyboard.dismiss
-      setNewTask('')
-    }).catch((error) => {
-      alert('Ops, algo deu errado!')
+
     })
+    Keyboard.dismiss();
+    setNewTask('');
   }
 
   function handleDelete(key){

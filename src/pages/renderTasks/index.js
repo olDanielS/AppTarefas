@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 
-export default function RenderItems(item) {
+export default function RenderItems({data}) {
  return (
    <View style={styles.container}> 
         <TouchableOpacity style={{alignItems: 'center'}}>
             <Feather name='trash-2' size={20} color='#FFF'/>
         </TouchableOpacity>
-        <Text style={styles.nome}> {item.data.nome}</Text>
+        <Text style={styles.nome}> {data.nome}</Text>
    </View>
   );
 }
